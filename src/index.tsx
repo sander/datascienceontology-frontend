@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { match } from "react-router";
 import * as Router from "react-router-dom";
 import { Route, Switch } from "react-router-dom";
 import {
@@ -11,6 +12,7 @@ import {
 } from "react-bulma-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import Browser from "./new/Browser";
 import { HomePage } from "./pages/home";
 import { AnnotationPage } from "./pages/annotation";
 import { AnnotationIndexPage } from "./pages/annotation_index";
@@ -24,6 +26,10 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "react-bulma-components/dist/react-bulma-components.min.css";
 import "bulma-helpers/css/bulma-helpers.min.css";
 import "./style/main.css";
+
+interface BrowserParams {
+  path?: string;
+}
 
 const App = () => (
   <div id="app">
@@ -50,6 +56,17 @@ const App = () => (
     <Container renderAs="main" className="has-margin-top-15">
       <Switch>
         <Route exact path="/" component={HomePage} />
+        <Route
+          path="/browser:path(/.*)"
+          component={({ match }: { match: match<BrowserParams> }) => (
+            <Browser
+              path={
+                match.params.path ||
+                "/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/index.json"
+              }
+            />
+          )}
+        />
         <Route
           path="/annotation/:language/:package/:id"
           component={AnnotationPage}
