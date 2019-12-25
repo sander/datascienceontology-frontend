@@ -166,7 +166,7 @@ const PortDisplay = (props: { port: Concept.Port }) => {
   return (
     <div className="concept-port">
       {port.name !== undefined && `${port.name}: `}
-      <Router.Link to={`/concept/${port.type}`}>{port.type}</Router.Link>
+      <Router.Link to={port.type["@id"]}>{port.type.name}</Router.Link>
       {port.description !== undefined && (
         <p className="has-text-grey">{port.description}</p>
       )}

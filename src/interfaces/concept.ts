@@ -64,7 +64,7 @@ export interface FunctionConcept extends Concept {
  */
 export interface Port {
   /* ID of a type concept */
-  type: string;
+  type: Symbol;
 
   /* Syntactic name of port */
   name?: string;
