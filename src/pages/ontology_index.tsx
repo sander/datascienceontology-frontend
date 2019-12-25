@@ -1,5 +1,5 @@
 import React from "react";
-import { Content, Heading } from "react-bulma-components";
+import { Content } from "react-bulma-components";
 import { Link } from "react-router-dom";
 
 import { Symbol } from "../interfaces/symbol";

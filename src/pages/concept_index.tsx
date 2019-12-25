@@ -1,11 +1,7 @@
-import * as _ from "lodash";
 import * as React from "react";
 import { Heading } from "react-bulma-components";
 
-import * as Concept from "../interfaces/concept";
-import { displayResponseData } from "../components/higher-order";
 import { ConceptFullName } from "./concept";
-import { apiUrl } from "../config";
 import { Symbol } from "../interfaces/symbol";
 
 interface LetterWithConcepts {

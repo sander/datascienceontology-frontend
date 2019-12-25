@@ -65,7 +65,7 @@ export class MarkdownDocument extends React.Component<
     this.loadDocument(this.props.docURL);
   }
   componentDidUpdate(prevProps: MarkdownDocumentProps) {
-    if (this.props.docURL != prevProps.docURL) {
+    if (this.props.docURL !== prevProps.docURL) {
       this.loadDocument(this.props.docURL);
     }
   }

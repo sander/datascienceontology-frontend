@@ -48,11 +48,11 @@ function tableOfContentsTree(toc: TableOfContents): TableOfContentsNode {
   const stack = [{ node: root, depth: 0 }];
   function getLastFromStackUnsafe() {
     const last = _.last(stack);
-    if (!last) throw "No elements on stack";
+    if (!last) throw new Error("No elements on stack");
     const { node, depth } = last;
     return { node, depth };
   }
-  toc.map(item => {
+  toc.forEach(item => {
     const { id, value } = item;
     const itemNode: TableOfContentsNode = { id, value, children: [] };
     let { node, depth } = getLastFromStackUnsafe();

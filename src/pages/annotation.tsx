@@ -232,7 +232,6 @@ const PythonFunctionDefList = (props: {
 
 const RTypeDefList = (props: { annotation: Annotation.RType }) => {
   const annotation = props.annotation;
-  const slots = annotation.slots || [];
   return [
     <dt key="class-dt">{annotation.system || "S3"} class</dt>,
     <dd key="class-dd">
@@ -315,13 +314,13 @@ const PackageRepositoryLink = (props: {
 }) => {
   const annotation = props.annotation;
   const pkg = annotation.package;
-  if (Annotation.isPython(annotation) && pkg != "builtins") {
+  if (Annotation.isPython(annotation) && pkg !== "builtins") {
     return (
       <Link to={`https://pypi.org/project/${pkg}`} target="_blank">
         PyPI
       </Link>
     );
-  } else if (Annotation.isR(annotation) && rStdLib.indexOf(pkg) == -1) {
+  } else if (Annotation.isR(annotation) && rStdLib.indexOf(pkg) === -1) {
     return (
       <Link to={`https://cran.r-project.org/package=${pkg}`} target="_blank">
         CRAN
