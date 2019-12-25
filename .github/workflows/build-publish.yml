@@ -6,7 +6,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IPFS_DEPLOY_CLOUDFLARE__API_TOKEN: ${{ secrets.IPFS_DEPLOY_CLOUDFLARE__API_TOKEN }}
+      IPFS_DEPLOY_CLOUDFLARE__API_EMAIL: ${{ secrets.IPFS_DEPLOY_CLOUDFLARE__API_EMAIL }}
+      IPFS_DEPLOY_CLOUDFLARE__API_KEY: ${{ secrets.IPFS_DEPLOY_CLOUDFLARE__API_KEY }}
       IPFS_DEPLOY_CLOUDFLARE__ZONE: sanderdijkhuis.nl
       IPFS_DEPLOY_CLOUDFLARE__RECORD: _dnslink.ontology-browser.sanderdijkhuis.nl
     steps:
@@ -22,4 +23,9 @@ jobs:
           LANG: en_US.UTF-8
           CI: true
       - name: Publish
-        run: npx ipfs-deploy -d cloudflare build
+        run: |
+          echo IPFS_DEPLOY_CLOUDFLARE__API_EMAIL=$IPFS_DEPLOY_CLOUDFLARE__API_EMAIL >> .env
+          echo IPFS_DEPLOY_CLOUDFLARE__API_KEY=$IPFS_DEPLOY_CLOUDFLARE__API_KEY >> .env
+          echo IPFS_DEPLOY_CLOUDFLARE__API_ZONE=$IPFS_DEPLOY_CLOUDFLARE__API_ZONE >> .env
+          echo IPFS_DEPLOY_CLOUDFLARE__API_RECORD=$IPFS_DEPLOY_CLOUDFLARE__API_RECORD >> .env
+          npx ipfs-deploy -d cloudflare build
