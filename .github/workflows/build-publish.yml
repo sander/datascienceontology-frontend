@@ -22,4 +22,4 @@ jobs:
           LANG: en_US.UTF-8
           CI: true
       - name: Publish
-        run: npx ipfs-deploy -p cloudflare build
+        run: npx ipfs-deploy -d cloudflare build
