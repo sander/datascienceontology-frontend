@@ -28,5 +28,5 @@ jobs:
           echo IPFS_DEPLOY_CLOUDFLARE__API_KEY=$IPFS_DEPLOY_CLOUDFLARE__API_KEY >> .env
           echo IPFS_DEPLOY_CLOUDFLARE__API_ZONE=$IPFS_DEPLOY_CLOUDFLARE__API_ZONE >> .env
           echo IPFS_DEPLOY_CLOUDFLARE__API_RECORD=$IPFS_DEPLOY_CLOUDFLARE__API_RECORD >> .env
-          ls -la /home/runner/work/ontology-browser/ontology-browser/build
-          npx ipfs-deploy -d cloudflare /home/runner/work/ontology-browser/ontology-browser/build
+          find build/static/**/*.map | xargs rm
+          npx ipfs-deploy -d cloudflare build
