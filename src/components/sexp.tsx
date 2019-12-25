@@ -2,6 +2,7 @@ import * as React from "react";
 import * as Router from "react-router-dom";
 
 import { SExp } from "../interfaces/expression";
+import { Symbol, isSymbol } from "../interfaces/symbol";
 
 import "../style/components/sexp.css";
 
@@ -29,9 +30,7 @@ export class SExpComponent extends React.Component<SExpProps> {
   }
 
   renderSExp(sexp: SExp): JSX.Element {
-    if (typeof sexp === "string") {
-      return this.renderSExpTerminal(sexp);
-    }
+    if (isSymbol(sexp)) return this.renderSExpTerminal(sexp);
     return (
       <ol>
         {sexp.map((term, i) => {
@@ -51,11 +50,11 @@ export class SExpComponent extends React.Component<SExpProps> {
     return <span className="s-expression-head">{name}</span>;
   }
 
-  renderSExpTerminal(value: string): JSX.Element {
+  renderSExpTerminal(value: Symbol): JSX.Element {
     return (
       <span className="s-expression-terminal">
         {this.props.ontology ? (
-          <Router.Link to={`/concept/${value}`}>{value}</Router.Link>
+          <Router.Link to={value["@id"]}>{value.name}</Router.Link>
         ) : (
           value
         )}

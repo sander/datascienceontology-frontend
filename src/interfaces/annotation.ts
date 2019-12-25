@@ -1,10 +1,11 @@
 import { SExp } from "./expression";
+import { Symbol } from "./symbol";
 
 /** Code annotation in an ontology.
 
   Mirrors the JSON schema for the database.
 */
-export interface Annotation {
+export interface Annotation extends Symbol {
   /* ID of document in database. */
   _id?: string;
 
@@ -21,7 +22,7 @@ export interface Annotation {
   id: string;
 
   /* Human-readable name of annotated code entity. */
-  name?: string;
+  name: string;
 
   /* Human-readable description of annotated code entity. */
   description?: string;

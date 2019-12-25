@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Columns, Heading } from "react-bulma-components";
 
 import * as Annotation from "../interfaces/annotation";
+import { Symbol } from "../interfaces/symbol";
 import { AnnotationCache } from "../interfaces/annotation_cache";
 import { KindGlyph, LanguageGlyph, SchemaGlyph } from "../components/glyphs";
 import { displayResponseData } from "../components/higher-order";
@@ -336,20 +337,16 @@ const FunctionDiagram = (props: { data?: AnnotationCache }) => {
 };
 const FunctionDiagramRequest = displayResponseData(FunctionDiagram);
 
-export const AnnotationFullName = (props: {
-  annotation: Annotation.Annotation;
-}) => {
-  const note = props.annotation;
-  const key = `${note.language}/${note.package}/${note.id}`;
-  return (
-    <span>
-      <Router.Link to={`/annotation/${key}`}>
-        {note.name !== undefined ? note.name : note.id}
-      </Router.Link>{" "}
-      <span className="has-text-grey">({key})</span>
-    </span>
-  );
-};
+export const AnnotationFullName = ({
+  annotation: { "@id": id, name }
+}: {
+  annotation: Symbol;
+}) => (
+  <span>
+    <Router.Link to={id}>{name}</Router.Link>{" "}
+    <span className="has-text-grey">({id})</span>
+  </span>
+);
 
 /** List of packages in r-base (the R standard library).
 

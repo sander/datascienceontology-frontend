@@ -1,10 +1,11 @@
 import { SExp } from "./expression";
+import { Symbol } from "./symbol";
 
 /** Concept in an ontology.
 
   Mirrors the JSON schema for the database.
  */
-export interface Concept {
+export interface Concept extends Symbol {
   /* ID of document in database. */
   _id?: string;
 
@@ -27,7 +28,7 @@ export interface Concept {
   definition?: SExp;
 
   /* Concept is a sub-concept of these concepts */
-  "is-a"?: string | string[];
+  "is-a"?: Symbol[];
 
   /* Links to external resources about the concept. */
   external?: {

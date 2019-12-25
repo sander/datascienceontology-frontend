@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
-import { notDeepEqual } from "assert";
+
+import { AnnotationDisplay } from "../pages/annotation";
+import { ConceptDisplay } from "../pages/concept";
+import {
+  AnnotationIndexPage,
+  AnnotationIndex
+} from "../pages/annotation_index";
+import { ConceptIndexPage, ConceptIndex } from "../pages/concept_index";
+import { OntologyIndexPage, OntologyIndex } from "../pages/ontology_index";
+import { Annotation } from "../interfaces/annotation";
+import { Concept } from "../interfaces/concept";
+
+const isAnnotation = (node: any): node is Annotation =>
+  node.language !== undefined && node.package !== undefined;
+const isConcept = (node: any): node is Concept =>
+  node.name !== undefined && !isAnnotation(node);
+const isConceptIndex = (node: any): node is ConceptIndex =>
+  Array.isArray(node) && node[0].letter !== undefined;
+const isAnnotationIndex = (node: any): node is AnnotationIndex =>
+  Array.isArray(node) && node[0].language !== undefined;
+const isOntologyIndex = (node: any): node is OntologyIndex =>
+  node.annotations !== undefined && node.concepts !== undefined;
 
 const loadAndSetData = (path: string, setData: (d: any) => void) => () => {
   const run = async () => {
@@ -13,86 +33,18 @@ const loadAndSetData = (path: string, setData: (d: any) => void) => () => {
   run();
 };
 
-const isAnnotation = (node: { language?: string; package?: string }) =>
-  node.language && node.package;
-const isConcept = (node: { "is-a"?: string; name?: string }) =>
-  node["is-a"] && node.name;
-
-interface Annotation {
-  language: string;
-  package: string;
-  id: string;
-  name: string;
-  class: string;
-  kind: "type" | "function";
-  description: string;
-  definition: any;
-}
-
-const Annotation = ({ node }: { node: Annotation }) => (
-  <div>
-    <h1>{node.name}</h1>
-    <h2>
-      A {node.kind} in the {node.language} {node.package} package
-    </h2>
-    <p>
-      Class: <code>{node.class}</code>
-    </p>
-    <p>{node.description}</p>
-    <p>
-      Represents a{" "}
-      <Link to={node.definition["@id"]}>{node.definition["name"]}</Link>
-    </p>
-  </div>
-);
-
-interface Concept {
-  name: string;
-  kind: "type" | "function";
-  "is-a"?: any;
-}
-
-const Concept = ({ node }: { node: Concept }) => (
-  <div>
-    <h1>{node.name}</h1>
-    <h2>A {node.kind}</h2>
-    <p>Is a {JSON.stringify(node["is-a"], null, 2)}</p>
-  </div>
-);
-
 const Browser = ({ path }: { path: string }) => {
-  const history = useHistory();
   const [data, setData] = useState();
 
   useEffect(loadAndSetData(path, setData), [path]);
 
-  return (
-    <div>
-      <input
-        size={80}
-        onChange={e => history.push(`/browser${e.target.value}`)}
-        value={path}
-      />
-      <Link to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/index.json">
-        Index
-      </Link>
-      <Link to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/concepts-alphabetical-by-name.json">
-        Concepts
-      </Link>
-      <Link to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/annotations-grouped-by-language-and-package.json">
-        Annotations
-      </Link>
-      <Link to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/concepts/agglomerative-clustering.json">
-        agglomerative clustering
-      </Link>
-      <Link to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/annotations/python/builtins/str.json">
-        python builtins str
-      </Link>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      {data && isAnnotation(data) && <Annotation node={data} />}
-      {data && isConcept(data) && <Concept node={data} />}
-    </div>
-  );
+  if (!data) return <></>;
+  if (isAnnotation(data)) return <AnnotationDisplay data={data} />;
+  if (isConcept(data)) return <ConceptDisplay data={data} />;
+  if (isConceptIndex(data)) return <ConceptIndexPage data={data} />;
+  if (isAnnotationIndex(data)) return <AnnotationIndexPage data={data} />;
+  if (isOntologyIndex(data)) return <OntologyIndexPage data={data} />;
+  return <></>;
 };
 
 export default Browser;

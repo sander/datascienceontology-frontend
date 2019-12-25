@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { Heading } from "react-bulma-components";
 
 import * as Concept from "../interfaces/concept";
+import { Symbol } from "../interfaces/symbol";
 import { KindGlyph, SchemaGlyph } from "../components/glyphs";
 import { displayResponseData } from "../components/higher-order";
 import { Link } from "../components/link";
@@ -50,13 +51,6 @@ const ConceptDisplayRequest = displayResponseData(ConceptDisplay);
 
 const ConceptDefList = (props: { concept: Concept.Concept }) => {
   const concept = props.concept;
-  const superconcept = concept["is-a"];
-  const superconcepts =
-    superconcept === undefined
-      ? null
-      : typeof superconcept === "string"
-      ? [superconcept]
-      : superconcept;
   const external = concept.external;
   const elements = [
     <dt key="id-dt">ID</dt>,
@@ -76,15 +70,15 @@ const ConceptDefList = (props: { concept: Concept.Concept }) => {
       </dd>
     );
   }
-  if (superconcepts) {
+  if (concept["is-a"]) {
     elements.push(
       <dt key="sub-dt">Is</dt>,
       <dd key="sub-dd">
         <ul className="list-inline">
-          {superconcepts.map((id, i) => (
+          {concept["is-a"].map(({ "@id": id, name }, i) => (
             <li key={i}>
-              <Router.Link key={id} to={`/concept/${id}`}>
-                {id}
+              <Router.Link key={id} to={id}>
+                {name}
               </Router.Link>
             </li>
           ))}
@@ -180,12 +174,12 @@ const PortDisplay = (props: { port: Concept.Port }) => {
   );
 };
 
-export const ConceptFullName = (props: { concept: Concept.Concept }) => {
+export const ConceptFullName = (props: { concept: Symbol }) => {
   const concept = props.concept;
   return (
     <span>
-      <Router.Link to={`/concept/${concept.id}`}>{concept.name}</Router.Link>{" "}
-      <span className="has-text-grey">({concept.id})</span>
+      <Router.Link to={concept["@id"]}>{concept.name}</Router.Link>{" "}
+      <span className="has-text-grey">({concept["@id"]})</span>
     </span>
   );
 };

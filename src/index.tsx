@@ -48,7 +48,9 @@ const App = () => (
         </Navbar.Item>
       </Navbar.Container>
       <Navbar.Container position="end">
-        <NavbarLink to="/browse">Browse</NavbarLink>
+        <NavbarLink to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/index.json">
+          Browse
+        </NavbarLink>
         <NavbarLink to="/help">Help</NavbarLink>
         <NavbarLink to="/about">About</NavbarLink>
       </Navbar.Container>
