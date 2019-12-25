@@ -1,0 +1,26 @@
+name: Build and publish
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IPFS_DEPLOY_CLOUDFLARE__API_TOKEN: ${{ secrets.IPFS_DEPLOY_CLOUDFLARE__API_TOKEN }}
+      IPFS_DEPLOY_CLOUDFLARE__ZONE: sanderdijkhuis.nl
+      IPFS_DEPLOY_CLOUDFLARE__RECORD: _dnslink.ontology-browser.sanderdijkhuis.nl
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Test and build
+        run: |
+          npm ci
+          npm test
+          npm run build
+        env:
+          LANG: en_US.UTF-8
+          CI: true
+      - name: Publish
+        run: npx ipfs-deploy -p cloudflare build
