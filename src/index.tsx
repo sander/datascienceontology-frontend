@@ -43,7 +43,7 @@ const App = () => (
         </Navbar.Item>
       </Navbar.Container>
       <Navbar.Container position="end">
-        <NavbarLink to="/browser/ipfs/QmXRhmUVp7EF7A9vxvRYYJAR13GpLx16Tf36jrgCqZTvZx/index.json">
+        <NavbarLink to="/browser/ipns/data-science-ontology.sanderdijkhuis.nl/index.json">
           Browse
         </NavbarLink>
         <NavbarLink to="/help">Help</NavbarLink>
