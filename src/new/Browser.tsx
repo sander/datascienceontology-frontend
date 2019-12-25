@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { AnnotationDisplay } from "../pages/annotation";
 import { ConceptDisplay } from "../pages/concept";
@@ -22,9 +23,11 @@ const isAnnotationIndex = (node: any): node is AnnotationIndex =>
 const isOntologyIndex = (node: any): node is OntologyIndex =>
   node.annotations !== undefined && node.concepts !== undefined;
 
-const loadAndSetData = (path: string, setData: (d: any) => void) => () => {
+type Protocol = "ipfs" | "ipns" | "https" | "http";
+
+const loadAndSetData = (url: string, setData: (d: any) => void) => () => {
   const run = async () => {
-    const result = await fetch(`https://cloudflare-ipfs.com${path}`);
+    const result = await fetch(url);
     const json = await result.json();
 
     setData(json);
@@ -33,11 +36,12 @@ const loadAndSetData = (path: string, setData: (d: any) => void) => () => {
   run();
 };
 
-const Browser = ({ path }: { path: string }) => {
-  const [data, setData] = useState();
+const url = (protocol: Protocol, path: string) =>
+  protocol === "ipfs" || protocol === "ipns"
+    ? `https://cloudflare-ipfs.com/${protocol}/${path}`
+    : `${protocol}://${path}`;
 
-  useEffect(loadAndSetData(path, setData), [path]);
-
+const Content = ({ data }: any) => {
   if (!data) return <></>;
   if (isAnnotation(data)) return <AnnotationDisplay data={data} />;
   if (isConcept(data)) return <ConceptDisplay data={data} />;
@@ -45,6 +49,23 @@ const Browser = ({ path }: { path: string }) => {
   if (isAnnotationIndex(data)) return <AnnotationIndexPage data={data} />;
   if (isOntologyIndex(data)) return <OntologyIndexPage data={data} />;
   return <></>;
+};
+
+const Browser = ({ protocol, path }: { protocol: Protocol; path: string }) => {
+  const [data, setData] = useState();
+
+  useEffect(loadAndSetData(url(protocol, path), setData), [path]);
+
+  return (
+    <div>
+      {data && data.ontology && (
+        <p>
+          <Link to={data.ontology["@id"]}>{data.ontology.name}</Link>
+        </p>
+      )}
+      <Content data={data} />
+    </div>
+  );
 };
 
 export default Browser;

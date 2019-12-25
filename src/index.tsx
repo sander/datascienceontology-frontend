@@ -54,8 +54,12 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route
-          path="/browser:path(/.*)"
-          component={({ match }: any) => <Browser path={match.params.path} />}
+          path="/browser/:protocol(https|http|ipfs|ipns)/:path(.*)"
+          component={({
+            match: {
+              params: { protocol, path }
+            }
+          }: any) => <Browser protocol={protocol} path={path} />}
         />
         <Route
           path="/annotation/:language/:package/:id"
