@@ -79,6 +79,5 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  },
-  "proxy": "https://api.datascienceontology.org"
+  }
 }

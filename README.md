@@ -20,12 +20,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-The development server will proxy the official
-[backend](https://github.com/epatters/datascienceontology-backend) running at
-https://api.datascienceontology.org.
-
-To change the backend for the locally served frontend, set `REACT_APP_ONTOLOGY_API` to another URL such as `http://localhost:3000`.
-
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.<br />
