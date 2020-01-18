@@ -6,14 +6,9 @@ import { Columns, Heading } from "react-bulma-components";
 
 import * as Annotation from "../interfaces/annotation";
 import { Symbol } from "../interfaces/symbol";
-import { AnnotationCache } from "../interfaces/annotation_cache";
 import { KindGlyph, LanguageGlyph, SchemaGlyph } from "../components/glyphs";
-import { displayResponseData } from "../components/higher-order";
 import { Link } from "../components/link";
 import { SExpComponent } from "../components/sexp";
-import { WiringDiagramComponent } from "../components/wiring-diagram";
-
-import { apiUrl } from "../config";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -47,7 +42,6 @@ const AnnotationContent = (props: { annotation: Annotation.Annotation }) => {
       </dl>
     );
   } else if (Annotation.isFunction(annotation)) {
-    const cacheId = `annotation/${annotation.language}/${annotation.package}/${annotation.id}`;
     return (
       <Columns>
         <Columns.Column>
@@ -55,13 +49,6 @@ const AnnotationContent = (props: { annotation: Annotation.Annotation }) => {
             {BaseDefList({ annotation })}
             {FunctionDefList({ annotation })}
           </dl>
-        </Columns.Column>
-        <Columns.Column>
-          {/*
-          TODO re-enable once https://github.com/epatters/datascienceontology-backend/issues/5 is fixed
-          
-          <FunctionDiagramRequest url={`${apiUrl}/_cache/${cacheId}`} />
-          */}
         </Columns.Column>
       </Columns>
     );
@@ -312,12 +299,6 @@ const PackageRepositoryLink = (props: {
   }
   return null;
 };
-
-const FunctionDiagram = (props: { data?: AnnotationCache }) => {
-  const cache = props.data;
-  return cache ? <WiringDiagramComponent {...cache.definition} /> : <></>;
-};
-const FunctionDiagramRequest = displayResponseData(FunctionDiagram);
 
 export const AnnotationFullName = ({
   annotation: { "@id": id, name }
