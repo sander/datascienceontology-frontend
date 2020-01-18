@@ -13,9 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Browser from "./new/Browser";
 import { HomePage } from "./pages/home";
-import { AnnotationPage } from "./pages/annotation";
 import { AnnotationIndexPage } from "./pages/annotation_index";
-import { ConceptPage } from "./pages/concept";
 import { ConceptIndexPage } from "./pages/concept_index";
 import { MarkdownPage, MarkdownDisplay } from "./pages/markdown";
 import { SearchPage } from "./pages/search";
@@ -61,11 +59,6 @@ const App = () => (
             }
           }: any) => <Browser protocol={protocol} path={path} />}
         />
-        <Route
-          path="/annotation/:language/:package/:id"
-          component={AnnotationPage}
-        />
-        <Route path="/concept/:id" component={ConceptPage} />
         <Route
           exact
           path="/browse"

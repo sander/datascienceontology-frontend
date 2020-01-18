@@ -17,11 +17,11 @@ const isAnnotation = (node: any): node is Annotation =>
 const isConcept = (node: any): node is Concept =>
   node.name !== undefined && !isAnnotation(node);
 const isConceptIndex = (node: any): node is ConceptIndex =>
-  Array.isArray(node) && node[0].letter !== undefined;
+  node.letters !== undefined;
 const isAnnotationIndex = (node: any): node is AnnotationIndex =>
-  Array.isArray(node) && node[0].language !== undefined;
+  node.languages !== undefined;
 const isOntologyIndex = (node: any): node is OntologyIndex =>
-  node.annotations !== undefined && node.concepts !== undefined;
+  node.indices !== undefined && node.title !== undefined;
 
 type Protocol = "ipfs" | "ipns" | "https" | "http";
 
@@ -43,11 +43,11 @@ const url = (protocol: Protocol, path: string) =>
 
 const Content = ({ data }: any) => {
   if (!data) return <></>;
-  if (isAnnotation(data)) return <AnnotationDisplay data={data} />;
-  if (isConcept(data)) return <ConceptDisplay data={data} />;
-  if (isConceptIndex(data)) return <ConceptIndexPage data={data} />;
-  if (isAnnotationIndex(data)) return <AnnotationIndexPage data={data} />;
-  if (isOntologyIndex(data)) return <OntologyIndexPage data={data} />;
+  if (isAnnotation(data)) return <AnnotationDisplay {...data} />;
+  if (isConcept(data)) return <ConceptDisplay {...data} />;
+  if (isConceptIndex(data)) return <ConceptIndexPage {...data} />;
+  if (isAnnotationIndex(data)) return <AnnotationIndexPage {...data} />;
+  if (isOntologyIndex(data)) return <OntologyIndexPage {...data} />;
   return <></>;
 };
 

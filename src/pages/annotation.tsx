@@ -18,43 +18,24 @@ import { apiUrl } from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
-interface AnnotationKey {
-  language: string;
-  package: string;
-  id: string;
-}
-type AnnotationPageProps = Router.RouteComponentProps<AnnotationKey>;
-
-export const AnnotationPage = (props: AnnotationPageProps) => {
-  const key = props.match.params;
-  const endpoint = `annotation/${key.language}/${key.package}/${key.id}`;
-  return <AnnotationRequest url={`${apiUrl}/${endpoint}`} />;
-};
-
-export const AnnotationDisplay = (props: { data?: Annotation.Annotation }) => {
-  const annotation = props.data;
-  return annotation ? (
-    <section id="annotation">
-      <Heading size={3}>
-        <span className="has-text-grey has-margin-right-75">
-          <SchemaGlyph schema="annotation" /> Annotation
-        </span>
-        {annotation.name || annotation.id}
-        <a
-          className="has-text-grey is-size-5"
-          title="Edit on GitHub"
-          href={`https://github.com/IBM/datascienceontology/tree/master/annotation/${annotation.language}/${annotation.package}/${annotation.id}.yml`}
-        >
-          <FontAwesomeIcon icon={faEdit} className="is-pulled-right" />
-        </a>
-      </Heading>
-      <AnnotationContent annotation={annotation} />
-    </section>
-  ) : (
-    <></>
-  );
-};
-const AnnotationRequest = displayResponseData(AnnotationDisplay);
+export const AnnotationDisplay = (annotation: Annotation.Annotation) => (
+  <section id="annotation">
+    <Heading size={3}>
+      <span className="has-text-grey has-margin-right-75">
+        <SchemaGlyph schema="annotation" /> Annotation
+      </span>
+      {annotation.name || annotation.id}
+      <a
+        className="has-text-grey is-size-5"
+        title="Edit on GitHub"
+        href={annotation.edit}
+      >
+        <FontAwesomeIcon icon={faEdit} className="is-pulled-right" />
+      </a>
+    </Heading>
+    <AnnotationContent annotation={annotation} />
+  </section>
+);
 
 const AnnotationContent = (props: { annotation: Annotation.Annotation }) => {
   const annotation = props.annotation;
@@ -76,7 +57,11 @@ const AnnotationContent = (props: { annotation: Annotation.Annotation }) => {
           </dl>
         </Columns.Column>
         <Columns.Column>
+          {/*
+          TODO re-enable once https://github.com/epatters/datascienceontology-backend/issues/5 is fixed
+          
           <FunctionDiagramRequest url={`${apiUrl}/_cache/${cacheId}`} />
+          */}
         </Columns.Column>
       </Columns>
     );
@@ -100,8 +85,6 @@ const BaseDefList = (props: { annotation: Annotation.Annotation }) => {
       {packageLink}
       {packageLink && ")"}
     </dd>,
-    <dt key="id-dt">ID</dt>,
-    <dd key="id-dd">{annotation.id}</dd>,
     <dt key="kind-dt">Kind</dt>,
     <dd key="kind-dd">
       <KindGlyph kind={annotation.kind} /> {annotation.kind}

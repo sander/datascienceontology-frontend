@@ -5,6 +5,16 @@ import { Symbol } from "./symbol";
   The same definition is used in the database JSON schemas for concepts and
   annotations.
  */
-export type SExp = Symbol | SExpArray;
+export type SExp = SExpAtom | SExpList;
 
-export interface SExpArray extends Array<Symbol | SExpArray> {}
+export interface SExpAtom {
+  atom: Symbol;
+}
+
+export interface SExpList {
+  operation: string;
+  arguments: SExp[];
+}
+
+export const isAtom = (s: SExp): s is SExpAtom => "atom" in s;
+export const isList = (s: SExp): s is SExpList => !isAtom(s);

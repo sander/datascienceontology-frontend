@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as Router from "react-router-dom";
 
-import { SExp } from "../interfaces/expression";
-import { Symbol, isSymbol } from "../interfaces/symbol";
+import { SExp, SExpAtom, isAtom } from "../interfaces/expression";
 
 import "../style/components/sexp.css";
 
@@ -30,18 +29,14 @@ export class SExpComponent extends React.Component<SExpProps> {
   }
 
   renderSExp(sexp: SExp): JSX.Element {
-    if (isSymbol(sexp)) return this.renderSExpTerminal(sexp);
-    return (
+    return isAtom(sexp) ? (
+      this.renderSExpTerminal(sexp)
+    ) : (
       <ol>
-        {sexp.map((term, i) => {
-          let content: JSX.Element | null = null;
-          if (i === 0 && typeof term === "string") {
-            content = this.renderSExpHead(term);
-          } else {
-            content = this.renderSExp(term);
-          }
-          return <li key={i}>{content}</li>;
-        })}
+        <li>{this.renderSExpHead(sexp.operation)}</li>
+        {sexp.arguments.map((term, i) => (
+          <li key={i}>{this.renderSExp(term)}</li>
+        ))}
       </ol>
     );
   }
@@ -50,11 +45,11 @@ export class SExpComponent extends React.Component<SExpProps> {
     return <span className="s-expression-head">{name}</span>;
   }
 
-  renderSExpTerminal(value: Symbol): JSX.Element {
+  renderSExpTerminal(value: SExpAtom): JSX.Element {
     return (
       <span className="s-expression-terminal">
         {this.props.ontology ? (
-          <Router.Link to={value["@id"]}>{value.name}</Router.Link>
+          <Router.Link to={value.atom["@id"]}>{value.atom.name}</Router.Link>
         ) : (
           value
         )}

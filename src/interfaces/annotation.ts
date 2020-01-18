@@ -32,6 +32,8 @@ export interface Annotation extends Symbol {
 
   /* Definition of annotated code as concept in ontology. */
   definition: SExp;
+
+  edit: string;
 }
 
 /** Type annotation in ontology.

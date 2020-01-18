@@ -6,55 +6,38 @@ import { Heading } from "react-bulma-components";
 import * as Concept from "../interfaces/concept";
 import { Symbol } from "../interfaces/symbol";
 import { KindGlyph, SchemaGlyph } from "../components/glyphs";
-import { displayResponseData } from "../components/higher-order";
 import { Link } from "../components/link";
-import { apiUrl } from "../config";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faWikipediaW } from "@fortawesome/free-brands-svg-icons";
 
-type ConceptPageProps = Router.RouteComponentProps<{ id: string }>;
-
-export const ConceptPage = (props: ConceptPageProps) => {
-  const id = props.match.params.id;
-  return <ConceptDisplayRequest url={`${apiUrl}/concept/${id}`} />;
-};
-
-export const ConceptDisplay = (props: { data?: Concept.Concept }) => {
-  const concept = props.data;
-  return concept ? (
-    <section id="concept">
-      <Heading size={3}>
-        <span className="has-text-grey has-margin-right-75">
-          <SchemaGlyph schema="concept" /> Concept
-        </span>
-        {concept.name}
-        <a
-          className="has-text-grey is-size-5"
-          title="Edit on GitHub"
-          href={`https://github.com/IBM/datascienceontology/tree/master/concept/${concept.id}.yml`}
-        >
-          <FontAwesomeIcon icon={faEdit} className="is-pulled-right" />
-        </a>
-      </Heading>
-      <dl className="dl-inline">
-        {ConceptDefList({ concept })}
-        {Concept.isFunction(concept) && FunctionConceptDefList({ concept })}
-      </dl>
-    </section>
-  ) : (
-    <></>
-  );
-};
-const ConceptDisplayRequest = displayResponseData(ConceptDisplay);
+export const ConceptDisplay = (concept: Concept.Concept) => (
+  <section id="concept">
+    <Heading size={3}>
+      <span className="has-text-grey has-margin-right-75">
+        <SchemaGlyph schema="concept" /> Concept
+      </span>
+      {concept.name}
+      <a
+        className="has-text-grey is-size-5"
+        title="Edit on GitHub"
+        href={`https://github.com/IBM/datascienceontology/tree/master/concept/${concept.id}.yml`}
+      >
+        <FontAwesomeIcon icon={faEdit} className="is-pulled-right" />
+      </a>
+    </Heading>
+    <dl className="dl-inline">
+      {ConceptDefList({ concept })}
+      {Concept.isFunction(concept) && FunctionConceptDefList({ concept })}
+    </dl>
+  </section>
+);
 
 const ConceptDefList = (props: { concept: Concept.Concept }) => {
   const concept = props.concept;
   const external = concept.external;
   const elements = [
-    <dt key="id-dt">ID</dt>,
-    <dd key="id-dd">{concept.id}</dd>,
     <dt key="kind-dt">Kind</dt>,
     <dd key="kind-dd">
       <KindGlyph kind={concept.kind} /> {concept.kind}
@@ -91,35 +74,25 @@ const ConceptDefList = (props: { concept: Concept.Concept }) => {
       <dt key="external-dt">External links</dt>,
       <dd key="external-dd">
         <ul className="list-inline">
-          {external.wikipedia && (
-            <li>
-              <FontAwesomeIcon
-                icon={faWikipediaW}
-                className="has-margin-right-5"
-              />
-              <Link
-                to={`https://en.wikipedia.org/wiki/${external.wikipedia}`}
-                target="_blank"
-              >
-                {external.wikipedia.replace(/_/g, " ")}
+          {external.map(({ key, site, url }) => (
+            <li key={site}>
+              {site === "wikipedia" ? (
+                <FontAwesomeIcon
+                  icon={faWikipediaW}
+                  className="has-margin-right-5"
+                />
+              ) : (
+                <img
+                  src="/assets/images/logo-wikidata.svg"
+                  alt="Wikidata logo"
+                  style={{ height: "1.2em" }}
+                />
+              )}
+              <Link to={url} target="_blank">
+                {key.replace(/_/g, " ")}
               </Link>
             </li>
-          )}
-          {external.wikidata && (
-            <li>
-              <img
-                src="/assets/images/logo-wikidata.svg"
-                alt="Wikidata logo"
-                style={{ height: "1.2em" }}
-              />
-              <Link
-                to={`https://www.wikidata.org/wiki/${external.wikidata}`}
-                target="_blank"
-              >
-                {external.wikidata}
-              </Link>
-            </li>
-          )}
+          ))}
         </ul>
       </dd>
     );

@@ -32,12 +32,10 @@ export interface Concept extends Symbol {
 
   /* Links to external resources about the concept. */
   external?: {
-    /* Wikidata concept identifier. */
-    wikidata?: string;
-
-    /* Wikipedia page (name only, English language). */
-    wikipedia?: string;
-  };
+    key: string;
+    site: "wikidata" | "wikipedia";
+    url: string;
+  }[];
 }
 
 /** Object concept in an ontology.

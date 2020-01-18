@@ -4,18 +4,25 @@ import { Heading } from "react-bulma-components";
 import { ConceptFullName } from "./concept";
 import { Symbol } from "../interfaces/symbol";
 
-interface LetterWithConcepts {
-  letter: string;
-  concepts: Symbol[];
+export interface ConceptIndex {
+  letters: {
+    letter: string;
+    concepts: Symbol[];
+  }[];
 }
 
-export type ConceptIndex = LetterWithConcepts[];
+// interface LetterWithConcepts {
+//   letter: string;
+//   concepts: Symbol[];
+// }
 
-export const ConceptIndexPage = (props: { data: ConceptIndex }) => (
+//export type ConceptIndex = LetterWithConcepts[];
+
+export const ConceptIndexPage = ({ letters }: ConceptIndex) => (
   <section id="concept-index">
     <Heading size={2}>Index of Concepts</Heading>
     <ul>
-      {props.data.map(({ letter, concepts }) => (
+      {letters.map(({ letter, concepts }) => (
         <li key={letter} className="has-margin-bottom-25">
           <Heading subtitle size={3}>
             <a id={letter} href={`#${letter}`} className="has-text-black">

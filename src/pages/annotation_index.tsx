@@ -5,23 +5,21 @@ import { Heading } from "react-bulma-components";
 import { Symbol } from "../interfaces/symbol";
 import { AnnotationFullName } from "./annotation";
 
-interface LanguageWithPackages {
-  language: string;
-  packages: PackageWithAnnotations[];
+export interface AnnotationIndex {
+  languages: {
+    language: string;
+    packages: {
+      package: [string, string];
+      annotations: Symbol[];
+    }[];
+  }[];
 }
 
-interface PackageWithAnnotations {
-  package: [string, string];
-  annotations: Symbol[];
-}
-
-export type AnnotationIndex = LanguageWithPackages[];
-
-export const AnnotationIndexPage = (props: { data: AnnotationIndex }) => (
+export const AnnotationIndexPage = ({ languages }: AnnotationIndex) => (
   <section id="annotation-index">
     <Heading size={2}>Index of Annotations</Heading>
     <ul>
-      {props.data.map(({ language, packages }) => (
+      {languages.map(({ language, packages }) => (
         <li key={language} className="has-margin-bottom-25">
           <Heading subtitle size={3}>
             <a
