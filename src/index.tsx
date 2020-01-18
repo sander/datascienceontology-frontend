@@ -153,8 +153,8 @@ class SearchBar extends React.Component<SearchBarProps, { query: string }> {
 }
 
 ReactDOM.render(
-  <Router.BrowserRouter>
+  <Router.HashRouter>
     <App />
-  </Router.BrowserRouter>,
+  </Router.HashRouter>,
   document.getElementById("root")
 );
