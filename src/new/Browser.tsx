@@ -42,6 +42,7 @@ const url = (protocol: Protocol, path: string) =>
     : `${protocol}://${path}`;
 
 const Content = ({ data }: any) => {
+  console.log("rendering data", data);
   if (!data) return <></>;
   if (isAnnotation(data)) return <AnnotationDisplay {...data} />;
   if (isConcept(data)) return <ConceptDisplay {...data} />;
