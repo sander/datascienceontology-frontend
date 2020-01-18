@@ -8,6 +8,8 @@ The Data Science Ontology itself lives in its own
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+A copy is hosted on: https://ontology-browser.sanderdijkhuis.nl/
+
 ## Available Scripts
 
 In the project directory, you can run:
